@@ -54,18 +54,28 @@ resource "azurerm_virtual_machine" "myVM" {
   resource_group_name   = azurerm_resource_group.myResourceGroup.name
   network_interface_ids = [azurerm_network_interface.myNetworkInterface.id]
   vm_size               = var.size
-  admin_username      = var.admin_username
-  admin_password      = var.admin_password
 
-  os_disk {
-    caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
+  storage_os_disk {
+    name              = "myOSDisk"
+    caching           = "ReadWrite"
+    create_option     = "FromImage"
+    managed_disk_type = "Standard_LRS"
   }
 
-  source_image_reference {
-    publisher = "MicrosoftWindowsServer"
-    offer     = "WindowsServer"
-    sku       = "2016-Datacenter"
+  storage_image_reference {
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "18.04-LTS"
     version   = "latest"
+  }
+
+  os_profile {
+    computer_name  = var.name
+    admin_username = var.admin_username
+    admin_password = var.admin_password
+  }
+
+  os_profile_linux_config {
+    disable_password_authentication = false
   }
 }
