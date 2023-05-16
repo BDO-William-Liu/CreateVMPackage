@@ -49,7 +49,7 @@ resource "azurerm_network_interface" "myNetworkInterface" {
 }
 
 resource "azurerm_virtual_machine" "myVM" {
-  name                  = "${var.name}-vm"
+  name                  = var.name
   location              = azurerm_resource_group.myResourceGroup.location
   resource_group_name   = azurerm_resource_group.myResourceGroup.name
   network_interface_ids = [azurerm_network_interface.myNetworkInterface.id]
